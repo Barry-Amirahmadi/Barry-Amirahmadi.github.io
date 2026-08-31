@@ -1757,7 +1757,7 @@ GLField.VERT=[
 'attribute vec3 aA;attribute vec3 aB;attribute vec3 aC;attribute vec3 aT;attribute vec2 aSeed;attribute vec2 aBrainInfo;',
 'uniform mat4 uProj;uniform mat4 uView;uniform float uStage;uniform float uTime;',
 'uniform float uSize;uniform float uBreath;uniform vec2 uMouse;uniform float uMouseOn;uniform float uCore;',
-'uniform float uForm;uniform float uIntro;',
+'uniform float uForm;uniform float uIntro;uniform float uEntry;',
 'varying vec3 vCol;varying float vFade;varying float vSize;',
 'vec3 grad(float t,float fam){',
 /* green → light blue → violet, top to bottom */
@@ -1784,7 +1784,7 @@ GLField.VERT=[
    then dissolve out of it into the first shape. */
 '  vec3 target=mix(aT,shape,uIntro);',
 '  float a1=aSeed.x*6.283,a2=aSeed.y*6.283;',
-'  vec3 away=vec3(cos(a1)*1.9,sin(a2)*1.4,sin(a1+a2)*1.3)*3.1;',
+'  vec3 away=vec3(cos(a1)*1.9,sin(a2)*1.4,sin(a1+a2)*1.3)*(3.1*uEntry);',
 '  vec3 p=mix(aT+away,target,uForm);',
 /* a slow living drift so the field never looks frozen */
 /* A bright centre that beats, with the beat travelling outward through
@@ -1879,7 +1879,7 @@ GLField.prototype.initGL=function(){
     uSize:gl.getUniformLocation(p,'uSize'),uBreath:gl.getUniformLocation(p,'uBreath'),
     uMouse:gl.getUniformLocation(p,'uMouse'),uMouseOn:gl.getUniformLocation(p,'uMouseOn'),
     uCore:gl.getUniformLocation(p,'uCore'),
-    uForm:gl.getUniformLocation(p,'uForm'),uIntro:gl.getUniformLocation(p,'uIntro'),
+    uForm:gl.getUniformLocation(p,'uForm'),uIntro:gl.getUniformLocation(p,'uIntro'),uEntry:gl.getUniformLocation(p,'uEntry'),
     uDim:gl.getUniformLocation(p,'uDim')
   };
   gl.enable(gl.DEPTH_TEST);
@@ -2147,7 +2147,7 @@ GLField.prototype.tick=function(now){
   gl.uniform2f(L.uMouse,this.mouse[0],this.mouse[1]);
   gl.uniform1f(L.uMouseOn,this.mouseOn);
   gl.uniform1f(L.uForm,this.form);
-  gl.uniform1f(L.uIntro,this.intro);
+  gl.uniform1f(L.uEntry,this.mobile?0.42:1.0);gl.uniform1f(L.uIntro,this.intro);
   gl.uniform1f(L.uCore,0.75+0.45*Math.sin(time*1.6));
   gl.uniform1f(L.uDim,this.dim);
   gl.drawArrays(gl.POINTS,0,this.count);
@@ -2731,26 +2731,38 @@ ReactDOM.render(e(App),document.getElementById('root'));
   var host=document.getElementById('certMarquee'),track=document.getElementById('certTrack');
   if(!host||!track)return;
   if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  var paused=false,dragging=false,startX=0,startScroll=0,pos=0;
+  var idleAt=0,applied=null,hovering=false,drag=false,startX=0,startScroll=0;
+  var STEP=0.6,WAIT=1400;
+  /* Touch scrolling is left to the browser. An earlier version drove the strip
+     from its own position counter and wrote that back every frame, so a finger
+     scroll was undone a moment later; the drift now simply adds to wherever
+     the strip actually is. */
+  host.addEventListener('mouseenter',function(){hovering=true;});
+  host.addEventListener('mouseleave',function(){hovering=false;});
   host.addEventListener('pointerdown',function(ev){
-    dragging=true;paused=true;startX=ev.clientX;startScroll=host.scrollLeft;
+    idleAt=Date.now();
+    if(ev.pointerType!=='mouse')return;      /* touch is the browser's job */
+    drag=true;startX=ev.clientX;startScroll=host.scrollLeft;
     try{host.setPointerCapture(ev.pointerId);}catch(_){}
   });
   host.addEventListener('pointermove',function(ev){
-    if(!dragging)return;
+    if(!drag)return;
     host.scrollLeft=startScroll-(ev.clientX-startX);
+    idleAt=Date.now();
   });
-  function release(){dragging=false;pos=host.scrollLeft;setTimeout(function(){paused=false;},1200);}
+  function release(){drag=false;idleAt=Date.now();}
   host.addEventListener('pointerup',release);
   host.addEventListener('pointercancel',release);
-  host.addEventListener('mouseenter',function(){paused=true;});
-  host.addEventListener('mouseleave',function(){if(!dragging){pos=host.scrollLeft;paused=false;}});
   function tick(){
-    if(!paused&&document.visibilityState==='visible'){
-      pos+=0.6;
+    if(document.visibilityState==='visible'){
       var half=track.scrollWidth/2;
-      if(pos>=half)pos-=half;
-      host.scrollLeft=pos;
+      /* Any movement this loop did not apply — a finger, its momentum, a
+         trackpad swipe — means the reader has taken over. */
+      if(applied!==null&&Math.abs(host.scrollLeft-applied)>1.5)idleAt=Date.now();
+      if(hovering||drag)idleAt=Date.now();
+      if(Date.now()-idleAt>WAIT)host.scrollLeft+=STEP;
+      if(half>0&&host.scrollLeft>=half)host.scrollLeft-=half;
+      applied=host.scrollLeft;
     }
     requestAnimationFrame(tick);
   }
