@@ -359,6 +359,9 @@ main{position:relative;z-index:2}
   .architecture-sticky{min-height:auto;padding-top:0}
   .arch-copy{top:auto}
   .arch-stage{margin-top:28px;height:66vh;touch-action:pan-y}
+  .arch-progress{display:grid;grid-template-columns:1fr;gap:10px;margin-top:22px}
+  .arch-step{grid-template-columns:26px 1fr;gap:10px}
+  .arch-step em{font-size:12.5px}
   .arch-interaction-hint{right:10px;bottom:10px;font-size:8px}
   .back-to-top{right:14px;bottom:16px;padding:10px}.back-to-top small{display:none}
   .project-track{scroll-snap-type:none!important}
@@ -2266,7 +2269,7 @@ App.prototype.setupArchitecture=function(){
   var stage=document.getElementById('archStage');if(!stage)return;
   var self=this,drag=false,startX=0,startY=0,startProgress=0,moved=false;
   this.applyArchitectureProgress(0);
-  function interact(){if(!self.archInteracted){self.archInteracted=true;if(self.archAutoTimer){clearInterval(self.archAutoTimer);self.archAutoTimer=null;}}}
+  function interact(){self.archLastInteract=Date.now();}
   stage.addEventListener('pointerenter',interact,{once:true});
   stage.addEventListener('wheel',function(ev){
     if(window.innerWidth<=760)return;
@@ -2290,7 +2293,7 @@ App.prototype.setupArchitecture=function(){
   var observer=new IntersectionObserver(function(entries){self.archInView=entries[0].isIntersecting&&entries[0].intersectionRatio>.34;},{threshold:[0,.34,.6]});
   observer.observe(stage);
   this.archAutoTimer=setInterval(function(){
-    if(self.archInView&&!self.archInteracted&&!drag){self.animateArchitectureTo(self.archProgress+1,1050);}
+    if(self.archInView&&!drag&&(!self.archLastInteract||Date.now()-self.archLastInteract>5000)){self.animateArchitectureTo(self.archProgress+1,1050);}
   },3600);
 };
 App.prototype.setupLab=function(){var stage=document.getElementById('labStage');if(!stage)return;stage.addEventListener('pointermove',function(ev){var r=stage.getBoundingClientRect();var x=(ev.clientX-r.left)/r.width*2-1,y=(ev.clientY-r.top)/r.height*2-1;stage.style.setProperty('--lab-x',x.toFixed(3));stage.style.setProperty('--lab-y',y.toFixed(3));});stage.addEventListener('pointerleave',function(){stage.style.setProperty('--lab-x',0);stage.style.setProperty('--lab-y',0);});};
