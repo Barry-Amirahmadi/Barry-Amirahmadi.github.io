@@ -7,7 +7,7 @@
   --border:#4A4038;
   --text:#F6F2EC;
   --muted:#97A3B0;
-  --tertiary:#66717E;
+  --tertiary:#7A8593;
   --signal:#D2A15E;
   --technical:#7E9BB8;
   --copper:#C68B5C;
@@ -100,7 +100,7 @@ main{position:relative;z-index:2}
 .display{font-size:clamp(54px,8.5vw,132px);line-height:.88;letter-spacing:-.065em;margin:0;font-weight:760}
 .section-title{font-size:clamp(44px,6vw,92px);line-height:.92;letter-spacing:-.055em;margin:0}
 .lead{font-size:clamp(17px,1.65vw,23px);line-height:1.7;color:var(--muted);max-width:750px}
-.hero{height:230vh;position:relative}
+.hero{height:170vh;position:relative}
 .hero-sticky{height:100vh;height:100dvh;position:sticky;top:0;display:grid;place-items:center;overflow:hidden;padding-top:var(--header)}
 .hero-center{display:grid;place-items:center;height:100%;width:100%;position:relative}
 .brain-halo{position:absolute;left:50%;top:43%;width:min(66vw,840px);aspect-ratio:1.4/1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--technical) 9%,transparent),transparent 62%);filter:blur(16px);opacity:calc(1 - var(--hero-progress,0)*.65)}
@@ -255,7 +255,7 @@ main{position:relative;z-index:2}
 @media(max-width:1050px){
   .primary-nav{display:none}.story-grid,.arch-grid,.lab-grid,.detail-hero,.detail-content{grid-template-columns:1fr}.story-orbit{height:44vh}.architecture{height:390vh}.arch-copy{position:absolute;left:var(--gutter);right:var(--gutter);top:110px}.arch-copy p{display:none}.arch-progress{grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px}.arch-step{grid-template-columns:1fr}.arch-stage{margin-top:200px;height:62vh}.system-cube{width:min(66vw,600px);height:min(66vw,600px)}.system-face:nth-child(1){transform:rotateY(0) translateZ(220px)}.system-face:nth-child(2){transform:rotateY(90deg) translateZ(220px)}.system-face:nth-child(3){transform:rotateY(180deg) translateZ(220px)}.system-face:nth-child(4){transform:rotateY(270deg) translateZ(220px)}.project-card{flex-basis:80vw}.detail-content aside{display:none}}
 @media(max-width:760px){
-  :root{--gutter:18px;--header:64px}.site-header{padding-inline:16px}.wordmark{font-size:12px}.hero{height:190vh}.scroll-explore{bottom:28px}.story-intro{padding:90px 0}.story-grid{gap:45px}.architecture{height:330vh}.arch-copy{top:88px}.arch-progress{display:none}.arch-stage{margin-top:120px;height:68vh}.system-cube{width:76vw;height:76vw}.system-face{inset:8%;padding:22px}.system-face:nth-child(1){transform:rotateY(0) translateZ(145px)}.system-face:nth-child(2){transform:rotateY(90deg) translateZ(145px)}.system-face:nth-child(3){transform:rotateY(180deg) translateZ(145px)}.system-face:nth-child(4){transform:rotateY(270deg) translateZ(145px)}.face-content p{display:none}.face-node-field{width:150px;height:90px}.work{padding:100px 0}.work-head{display:block}.project-interaction-hint{display:none}.project-track{padding-inline:10vw 8vw;gap:16px;scroll-snap-type:x mandatory}.project-card{flex-basis:82vw;height:58vh}.project-meta{display:block;padding:24px}.project-meta p{display:none}.project-enter{width:44px;height:44px}.motion-lab{padding:100px 0}.lab-stage{height:54vh}.cta-ring:nth-child(1){width:74vw;height:74vw}.cta-ring:nth-child(2){width:122vw;height:122vw}.cta-ring:nth-child(3){width:176vw;height:176vw}.site-footer{display:block;line-height:2}.detail-hero{display:block}.detail-visual{height:46vh;margin-top:34px}.detail-content{padding-top:50px}.detail-content article{font-size:17px}.detail-content h2{font-size:34px}}
+  :root{--gutter:18px;--header:64px}.site-header{padding-inline:16px}.wordmark{font-size:12px}.hero{height:150vh}.scroll-explore{bottom:28px}.story-intro{padding:90px 0}.story-grid{gap:45px}.architecture{height:330vh}.arch-copy{top:88px}.arch-progress{display:none}.arch-stage{margin-top:120px;height:68vh}.system-cube{width:76vw;height:76vw}.system-face{inset:8%;padding:22px}.system-face:nth-child(1){transform:rotateY(0) translateZ(145px)}.system-face:nth-child(2){transform:rotateY(90deg) translateZ(145px)}.system-face:nth-child(3){transform:rotateY(180deg) translateZ(145px)}.system-face:nth-child(4){transform:rotateY(270deg) translateZ(145px)}.face-content p{display:none}.face-node-field{width:150px;height:90px}.work{padding:100px 0}.work-head{display:block}.project-interaction-hint{display:none}.project-track{padding-inline:10vw 8vw;gap:16px;scroll-snap-type:x mandatory}.project-card{flex-basis:82vw;height:58vh}.project-meta{display:block;padding:24px}.project-meta p{display:none}.project-enter{width:44px;height:44px}.motion-lab{padding:100px 0}.lab-stage{height:54vh}.cta-ring:nth-child(1){width:74vw;height:74vw}.cta-ring:nth-child(2){width:122vw;height:122vw}.cta-ring:nth-child(3){width:176vw;height:176vw}.site-footer{display:block;line-height:2}.detail-hero{display:block}.detail-visual{height:46vh;margin-top:34px}.detail-content{padding-top:50px}.detail-content article{font-size:17px}.detail-content h2{font-size:34px}}
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}.hero,.architecture{height:auto}.hero-sticky,.architecture-sticky{position:relative;min-height:100vh;min-height:100dvh}.brain-halo{opacity:.3}.system-cube{transform:none!important}.system-face{position:relative!important;transform:none!important;inset:auto;margin:16px 0;min-height:240px}.arch-stage{height:auto;display:block}.project-card:hover{transform:none}.reduced-note{display:block}
 }
@@ -687,7 +687,10 @@ body[data-lang="fa"] .project-interaction-hint,
 body[data-lang="fa"] .back-to-top small{text-transform:none;font-size:12.5px;opacity:.85}
 /* Latin-only fragments inside Persian text keep their own direction. */
 body[data-lang="fa"] .cta-contact{direction:ltr;unicode-bidi:isolate}
-.cta-contact a{color:inherit;text-decoration:none}
+/* Contact links are the page's primary action on a phone, so they carry a
+   44px minimum tap target rather than relying on the text's own height. */
+.cta-contact a{color:inherit;text-decoration:none;display:inline-flex;align-items:center;min-height:44px}
+.site-footer a{display:inline-flex;align-items:center;min-height:44px}
 .cta-contact a:hover,.cta-contact a:focus-visible{text-decoration:underline}
 
 /* Credential panels: the bar became a text line, so drop the fill and keep
