@@ -2117,7 +2117,12 @@ GLField.prototype.tick=function(now){
      screen the limit is the width, not the height, so the required distance
      is derived from the aspect rather than fixed. */
   var aspect=this.w/this.h;
-  var outer=1.45;                       /* ring outer radius in world units */
+  /* The brain is a wider shape than the ring, so fitting the frame to the
+     ring alone let it spill past both edges on a narrow phone screen.
+     Widen the fit target while the brain is the shape on screen. On a
+     desktop aspect the distance floor of 3.05 dominates, so this only
+     changes narrow portrait layouts. */
+  var outer=1.45+(1.0-Math.min(1.0,s))*0.24;
   var need=outer*1.12/(0.5463*Math.max(aspect,0.35));
   var dist=Math.max(3.05,need)+s*0.30;
   /* Face-on at the top of the page so the ring reads as a halo around the
