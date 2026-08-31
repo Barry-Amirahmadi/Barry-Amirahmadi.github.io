@@ -2134,7 +2134,16 @@ GLField.prototype.tick=function(now){
      and let it settle back once the name has scrolled away. */
   /* No lift: the name sits in the middle of the ring, not below it. */
   var lift=0.0;
-  if(this.intro<1){tilt*=this.intro;dist=3.05;}
+  /* The camera sat pinned at the name distance for the whole opening and
+     snapped to the fitted distance on the single frame intro reached 1 - a
+     2.46x step on a phone, which held the forming brain hard against both
+     edges for the 1.4s before it and then yanked it in. Ease between the two
+     instead. Each particle travels a straight line from its name position to
+     its shape position, so the cloud always sits inside the blend of the two
+     bounding boxes; easing the distance by the same factor keeps it inside
+     the frame the whole way. The 3.05 floor already dominates both ends on
+     any aspect wider than 1.136, so this is a no-op on desktop. */
+  if(this.intro<1){tilt*=this.intro;dist=3.05+(dist-3.05)*this.intro;}
 
   gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
   gl.uniformMatrix4fv(L.uProj,false,_persp(1.02,this.w/this.h,0.1,40));
